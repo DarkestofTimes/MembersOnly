@@ -1,5 +1,6 @@
-import { User } from "../models/User.mjs";
-import { Message } from "../models/Message.mjs";
+import { User } from "./models/User.mjs";
+import { Message } from "./models/Message.mjs";
+import bcrypt from "bcryptjs";
 
 export const retrieveFromDB = async (model, request) => {
   return await model.find().populate(request).exec();
@@ -15,6 +16,18 @@ export const createMessage = async (userId, subject, messageContent) => {
   await message.save();
 
   await User.findByIdAndUpdate(userId, { $push: { messages: message._id } });
+};
+
+export const createUser = async (username, password) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = new User({
+    username: username,
+    password: hashedPassword,
+    messages: [],
+    verified: false,
+    admin: false,
+  });
+  await user.save();
 };
 
 export const editMessage = async (

@@ -13,6 +13,8 @@ export const User = mongoose.model(
           ref: "Message",
         },
       ],
+      verified: { type: Boolean },
+      admin: { type: Boolean },
     },
     { timestamps: true }
   )
