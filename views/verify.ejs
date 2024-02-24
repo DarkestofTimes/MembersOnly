@@ -5,12 +5,16 @@
     <title></title>
   </head>
   <body>
-    <% if (user && !token) { %>
+    <% if (user && verified) { %>
+    <h1>WELCOME BACK <%= user %></h1>
+    <p>Verified</p>
+    <a href="/">back to main</a>
+    <%} else if (user && !token && !verified) { %>
     <h1>WELCOME BACK <%= user %></h1>
     <form action="/verify/getToken" method="post">
       <button>Issue Token</button>
     </form>
-    <% } else if (user && token ) { %>
+    <% } else if (user && token && !verified) { %>
     <h1>WELCOME BACK <%= user %></h1>
     <form action="/verify/verifyToken?token=<%= token %>" method="post">
       <button>Verify Token</button>

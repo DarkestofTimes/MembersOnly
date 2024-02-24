@@ -17,6 +17,8 @@
       <input name="password" id="password" type="password" />
       <button>Log In</button>
     </form>
-    <%}%>
+    <% if (errMessage.length > 0) {%>
+    <p><%= errMessage %></p>
+    <% } %> <%}%>
   </body>
 </html>

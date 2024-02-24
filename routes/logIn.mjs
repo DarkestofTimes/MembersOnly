@@ -18,7 +18,7 @@ const strategy = new LocalStrategy(async (username, password, done) => {
     }
     return done(null, user);
   } catch (err) {
-    return done(err);
+    return done(err, { message: "Internal Error" });
   }
 });
 
@@ -38,7 +38,12 @@ passport.deserializeUser(async (id, done) => {
 });
 
 router.get("/", (req, res) => {
-  res.render("logIn", { user: req.user ? req.user.username : null });
+  const errMessage = req.session.messages ? req.session.messages : "";
+  delete req.session.messages;
+  res.render("logIn", {
+    user: req.user ? req.user.username : null,
+    errMessage: errMessage,
+  });
 });
 
 router.post(
@@ -46,5 +51,6 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/logIn",
+    failureMessage: true,
   })
 );

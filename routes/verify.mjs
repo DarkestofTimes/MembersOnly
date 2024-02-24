@@ -5,7 +5,11 @@ import { generateVerificationToken, verifyToken } from "../verification.mjs";
 export const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.render("verify", { user: req.user.username, token: req.query.token });
+  res.render("verify", {
+    user: req.user ? req.user.username : "",
+    token: req.query.token,
+    verified: req.user ? req.user.verified : false,
+  });
 });
 
 router.post("/getToken", async (req, res) => {

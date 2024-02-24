@@ -58,20 +58,3 @@ export const deleteMessage = async (messageId, userId) => {
 
   await User.findByIdAndUpdate(userId, { $pull: { messages: messageId } });
 };
-
-/* export const insertToDB = async (model1, model2, data) => {
-  const item = new model1({
-    ...data,
-    _id: new mongoose.Types.ObjectId(),
-  });
-
-  const item2 = new model2({
-    ...data,
-    username: item._id,
-  });
-
-  await item2.save();
-
-  item.messages.push(item2._id);
-  await item.save();
-}; */
