@@ -15,6 +15,7 @@ export const User = mongoose.model(
       ],
       verified: { type: Boolean },
       admin: { type: Boolean },
+      jwt: { type: String },
     },
     { timestamps: true }
   )

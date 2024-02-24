@@ -12,7 +12,7 @@
         name="username"
         id="username"
         type="text"
-        value="<%= username ? username : '' %>" />
+        value="<%= typeof username !== 'undefined' ? username : '' %>" />
       <% if (errors.usernameError && errors.usernameError.length > 0) { %>
       <ul>
         <% errors.usernameError.forEach(errorMsg => { %>

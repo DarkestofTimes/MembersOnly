@@ -5,7 +5,7 @@ import { generateErrorObject } from "../generateErrorObject.mjs";
 
 export const router = express.Router();
 
-router.get("/", (req, res) => res.render("signUp"));
+router.get("/", (req, res) => res.render("signUp", { errors: {} }));
 
 router.post(
   "/",

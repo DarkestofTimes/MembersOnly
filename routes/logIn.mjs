@@ -38,6 +38,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 router.get("/", (req, res) => {
+  console.log(req.user);
   res.render("logIn", { user: req.user });
 });
 

@@ -9,6 +9,7 @@ import { connectToDB, disconnectFromDB } from "./dbConnectDisconnect.mjs";
 import { router as signUp } from "./routes/signUp.mjs";
 import { router as logIn } from "./routes/logIn.mjs";
 import { router as index } from "./routes/index.mjs";
+import { router as verify } from "./routes/verify.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +40,16 @@ app.use(express.json());
 app.use("/", index);
 app.use("/signUp", signUp);
 app.use("/logIn", logIn);
+app.use("/verify", verify);
+
+app.get("/logOut", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
 
 process.on("SIGINT", async () => {
   await disconnectFromDB();

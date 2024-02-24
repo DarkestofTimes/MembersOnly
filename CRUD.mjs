@@ -26,8 +26,17 @@ export const createUser = async (username, password) => {
     messages: [],
     verified: false,
     admin: false,
+    jwt: "",
   });
   await user.save();
+};
+
+export const assignTokenToUser = async (userId, token) => {
+  await User.findByIdAndUpdate(userId, { jwt: token });
+};
+
+export const setVerifiedForUser = async (userId) => {
+  await User.findByIdAndUpdate(userId, { verified: true });
 };
 
 export const editMessage = async (
