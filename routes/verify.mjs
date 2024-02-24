@@ -5,15 +5,13 @@ import { generateVerificationToken, verifyToken } from "../verification.mjs";
 export const router = express.Router();
 
 router.get("/", (req, res) => {
-  console.log(req.user);
-  res.render("verify", { user: req.user, token: req.query.token });
+  res.render("verify", { user: req.user.username, token: req.query.token });
 });
 
 router.post("/getToken", async (req, res) => {
   if (req.isAuthenticated()) {
     const token = generateVerificationToken(req.user._id);
     await assignTokenToUser(req.user._id, token);
-    console.log(req.user);
     res.redirect(`/verify/?token=${token}`);
   } else {
     res.redirect("/logIn");
@@ -27,7 +25,6 @@ router.post("/verifyToken", async (req, res) => {
       try {
         if (verifyToken(token)) {
           await setVerifiedForUser(req.user._id);
-          console.log(req.user);
           res.redirect("/");
         }
       } catch (error) {

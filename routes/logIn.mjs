@@ -9,12 +9,12 @@ export const router = express.Router();
 const strategy = new LocalStrategy(async (username, password, done) => {
   try {
     const user = await User.findOne({ username: username });
-    const match = await bcrypt.compare(password, user.password);
     if (!user) {
-      return done(null, false, { message: "Incorrect username" });
+      return done(null, false, { message: "Incorrect credentials" });
     }
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return done(null, false, { message: "Incorrect password" });
+      return done(null, false, { message: "Incorrect credentials" });
     }
     return done(null, user);
   } catch (err) {
@@ -38,8 +38,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 router.get("/", (req, res) => {
-  console.log(req.user);
-  res.render("logIn", { user: req.user });
+  res.render("logIn", { user: req.user ? req.user.username : null });
 });
 
 router.post(

@@ -6,12 +6,12 @@
   </head>
   <body>
     <% if (user && !token) { %>
-    <h1>WELCOME BACK <%= user.username %></h1>
+    <h1>WELCOME BACK <%= user %></h1>
     <form action="/verify/getToken" method="post">
       <button>Issue Token</button>
     </form>
     <% } else if (user && token ) { %>
-    <h1>WELCOME BACK <%= user.username %></h1>
+    <h1>WELCOME BACK <%= user %></h1>
     <form action="/verify/verifyToken?token=<%= token %>" method="post">
       <button>Verify Token</button>
     </form>
