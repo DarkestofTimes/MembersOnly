@@ -5,18 +5,55 @@
     <title></title>
   </head>
   <body>
-    <% if (user) {%>
-    <h1>WELCOME BACK <%= user.username %></h1>
-    <a href="/logOut">LOG OUT</a>
-    <% } else { %>
-    <h1>please log in</h1>
-    <form action="/logIn" method="POST">
-      <label for="username">Username</label>
-      <input name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input name="password" type="password" />
-      <button>Log In</button>
+    <h1>Hello!</h1>
+    <% if (!user) { %>
+    <a href="/logIn">Log In</a>
+    <a href="/signUp">Register</a>
+    <% } else if (user && !verified) { %>
+    <a href="/verify">Verify</a>
+    <a href="/logOut">Log out</a>
+    <% } else {%>
+    <a href="/logOut">Log out</a>
+    <% }%>
+    <div class="msgContainer">
+      <% messages.forEach((message) => { %> <% if (message) { %>
+      <div class="msg">
+        <h3><%= message.subject %></h3>
+        <p><%= message.message %></p>
+        <% if (verified) { %>
+        <p><%= message.user.username %></p>
+        <p><%= message.createdAt %></p>
+        <% if (message.createdAt.value !== message.updatedAt.value) { %>
+        <p><%= message.updatedAt %></p>
+        <% } %> <% } %> <% if (message.user._id.toString() === userId) { %>
+        <form
+          action="/editMessage?messageId=<%= message._id.toString() %>&userId=<%= userId %>"
+          method="post">
+          <button type="submit">Edit</button>
+        </form>
+        <% } %> <% if (admin) { %>
+        <form
+          action="/deleteMessage?messageId=<%= message._id.toString() %>&userId=<%= userId %>"
+          method="delete">
+          <button type="submit">Delete</button>
+        </form>
+        <% } %>
+      </div>
+      <% } %> <% }) %>
+    </div>
+    <% if (verified) { %>
+    <form
+      action="<%= messageToEdit ? `/updateMessage?messageId=${messageToEdit._id.toString()}` : '/postMessage' %>"
+      method="post">
+      <label for="subject">Subject</label>
+      <input name="subject" id="subject" type="text" required value="<%=
+      messageToEdit ? messageToEdit.subject : "" %>"/>
+      <textarea name="message" id="message" cols="30" rows="10" required>
+<%= messageToEdit ? messageToEdit.message : "" %></textarea
+      >
+
+      <button type="submit">Submit</button>
     </form>
-    <%}%>
+    <% } %>
   </body>
 </html>

@@ -3,7 +3,11 @@ import { Message } from "./models/Message.mjs";
 import bcrypt from "bcryptjs";
 
 export const retrieveFromDB = async (model, request) => {
-  return await model.find().populate(request).exec();
+  const retrievedData = await model.find().populate(request).exec();
+  if (!retrievedData) {
+    throw new Error("Message not found");
+  }
+  return retrievedData;
 };
 
 export const createMessage = async (userId, subject, messageContent) => {
@@ -31,30 +35,43 @@ export const createUser = async (username, password) => {
   await user.save();
 };
 
-export const assignTokenToUser = async (userId, token) => {
-  await User.findByIdAndUpdate(userId, { jwt: token });
-};
-
-export const setVerifiedForUser = async (userId) => {
-  await User.findByIdAndUpdate(userId, { verified: true });
-};
-
-export const editMessage = async (
-  messageId,
-  userId,
-  subject,
-  messageContent
-) => {
-  await Message.findByIdAndUpdate(messageId, {
+export const editMessage = async (messageId, subject, messageContent) => {
+  const updatedMessage = await Message.findByIdAndUpdate(messageId, {
     subject: subject,
     message: messageContent,
   });
-
-  await User.findByIdAndUpdate(userId, { $pull: { messages: messageId } });
+  if (!updatedMessage) {
+    throw new Error("Message not found");
+  }
 };
 
 export const deleteMessage = async (messageId, userId) => {
-  await Message.findByIdAndDelete(messageId);
-
+  const deletedMessage = await Message.findByIdAndDelete(messageId);
+  if (!deletedMessage) {
+    throw new Error("User not found");
+  }
   await User.findByIdAndUpdate(userId, { $pull: { messages: messageId } });
+};
+
+export const assignTokenToUser = async (userId, token) => {
+  const updatedUser = await User.findByIdAndUpdate(userId, { jwt: token });
+  if (!updatedUser) {
+    throw new Error("User not found");
+  }
+};
+
+export const setVerifiedForUser = async (userId) => {
+  const updatedUser = await User.findByIdAndUpdate(userId, { verified: true });
+  if (!updatedUser) {
+    throw new Error("User not found");
+  }
+};
+
+export const toggleAdmin = async (userId) => {
+  const updatedUser = await User.findByIdAndUpdate(userId, {
+    $bit: { admin: { xor: 1 } },
+  });
+  if (!updatedUser) {
+    throw new Error("User not found");
+  }
 };

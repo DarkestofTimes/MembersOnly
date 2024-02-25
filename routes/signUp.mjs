@@ -56,7 +56,7 @@ router.post(
           username: req.body.originalUsername,
         });
       }
-      createUser(req.body.username, req.body.password);
+      await createUser(req.body.username, req.body.password);
       res.redirect("/");
     } catch (err) {
       return next(err);
