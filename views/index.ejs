@@ -14,7 +14,11 @@
     <a href="/logOut">Log out</a>
     <% } else {%>
     <a href="/logOut">Log out</a>
-    <% }%>
+    <% if (admin) {%>
+    <a href="/adminOff">Admin is On</a>
+    <% } else { %>
+    <a href="/adminOn">Admin is Off</a>
+    <%} %> <% }%>
     <div class="msgContainer">
       <% messages.forEach((message) => { %> <% if (message) { %>
       <div class="msg">
@@ -31,10 +35,10 @@
           method="post">
           <button type="submit">Edit</button>
         </form>
-        <% } %> <% if (admin) { %>
+        <% } %> <% if (admin || message.user._id.toString() === userId ) { %>
         <form
           action="/deleteMessage?messageId=<%= message._id.toString() %>&userId=<%= userId %>"
-          method="delete">
+          method="post">
           <button type="submit">Delete</button>
         </form>
         <% } %>

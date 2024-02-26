@@ -67,9 +67,9 @@ export const setVerifiedForUser = async (userId) => {
   }
 };
 
-export const toggleAdmin = async (userId) => {
+export const toggleAdmin = async (userId, admin) => {
   const updatedUser = await User.findByIdAndUpdate(userId, {
-    $bit: { admin: { xor: 1 } },
+    $set: { admin: !admin },
   });
   if (!updatedUser) {
     throw new Error("User not found");

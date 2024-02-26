@@ -6,6 +6,7 @@ import {
   createMessage,
   editMessage,
   deleteMessage,
+  toggleAdmin,
 } from "../CRUD.mjs";
 
 export const router = express.Router();
@@ -79,3 +80,19 @@ router.post(
     res.redirect("/");
   }
 );
+
+router.get("/adminOn", async (req, res) => {
+  await toggleAdmin(req.user._id, req.user.admin);
+  res.redirect("/");
+});
+router.get("/adminOff", async (req, res) => {
+  await toggleAdmin(req.user._id, req.user.admin);
+  res.redirect("/");
+});
+
+router.post("/deleteMessage", async (req, res) => {
+  if (req.user.admin || req.user._id.toString() === req.query.userId) {
+    await deleteMessage(req.query.messageId, req.query.userId);
+  }
+  res.redirect("/");
+});
