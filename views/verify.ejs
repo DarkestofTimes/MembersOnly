@@ -11,11 +11,14 @@
     <a href="/">back to main</a>
     <%} else if (user && !token && !verified) { %>
     <h1>WELCOME BACK <%= user %></h1>
-    <form action="/verify/getToken" method="post">
+    <form action="/verify/getToken" method="get">
       <button>Issue Token</button>
     </form>
     <% } else if (user && token && !verified) { %>
     <h1>WELCOME BACK <%= user %></h1>
+    <% if (error) { %> %>
+    <p><%= error %></p>
+    %> <% } %>
     <form action="/verify/verifyToken?token=<%= token %>" method="post">
       <button>Verify Token</button>
     </form>

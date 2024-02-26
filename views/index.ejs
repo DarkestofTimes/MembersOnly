@@ -27,8 +27,9 @@
         <% if (verified) { %>
         <p><%= message.user.username %></p>
         <p><%= message.createdAt %></p>
-        <% if (message.createdAt.value !== message.updatedAt.value) { %>
-        <p><%= message.updatedAt %></p>
+        <% if (message.createdAt.toString() !== message.updatedAt.toString()) {
+        %>
+        <p>Edited <%= message.updatedAt %></p>
         <% } %> <% } %> <% if (message.user._id.toString() === userId) { %>
         <form
           action="/editMessage?messageId=<%= message._id.toString() %>&userId=<%= userId %>"

@@ -2,6 +2,7 @@ import express from "express";
 import { createUser } from "../CRUD.mjs";
 import { body, validationResult } from "express-validator";
 import { generateErrorObject } from "../generateErrorObject.mjs";
+import { User } from "../models/User.mjs";
 
 export const router = express.Router();
 
@@ -20,6 +21,13 @@ router.post(
     )
     .custom((value, { req }) => {
       req.body.originalUsername = value;
+      return true;
+    })
+    .custom(async (value) => {
+      const existingUser = await User.findOne({ username: value });
+      if (existingUser) {
+        throw new Error("Username already exists");
+      }
       return true;
     })
     .escape(),
